@@ -85,17 +85,27 @@ wget --no-check-certificate https://raw.github.com/jeffwilcox/waz-updown/master/
 
 ### MONGODB
 
-echo Adding MongoDB repos to the system...
-cat > ./mongodb.repo << "YUM10GEN"
-[mongodb]
-name=MongoDB Repository
-baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64/
-gpgcheck=0
-enabled=1
-YUM10GEN
- 
-sudo mv mongodb.repo /etc/yum.repos.d/
-sudo yum install -y mongodb-org > /tmp/installingMongo.log
+# Configure mongodb.list file with the correct location
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
+echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
+
+# Disable THP
+#sudo echo never > /sys/kernel/mm/transparent_hugepage/enabled
+#sudo echo never > /sys/kernel/mm/transparent_hugepage/defrag
+#sudo grep -q -F 'transparent_hugepage=never' /etc/default/grub || echo 'transparent_hugepage=never' >> /etc/default/grub
+
+# Install updates
+sudo apt-get -y update
+
+# Modified tcp keepalive according to https://docs.mongodb.org/ecosystem/platforms/windows-azure/
+sudo bash -c "sudo echo net.ipv4.tcp_keepalive_time = 120 >> /etc/sysctl.conf"
+
+#Install Mongo DB
+sudo apt-get install -y mongodb-org
+
+# Uncomment this to bind to all ip addresses
+sudo sed -i -e 's/bindIp: 127.0.0.1/bindIp: 0.0.0.0/g' /etc/mongod.conf
+
 
 
 ### AZURE STORAGE CONFIG
