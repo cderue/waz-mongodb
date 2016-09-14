@@ -300,15 +300,16 @@ w
 ENDPARTITION
 
 	echo Formatting w/ext4...
-	sudo mkfs.ext4 /dev/sdc1  > /tmp/format.log 2>&1
+	sudo mkfs -t ext4 /dev/sdc1  > /tmp/format.log 2>&1
 
 	echo Preparing permanent data disk mount point at /mnt/data...
 	sudo mkdir /mnt/data
 	echo '/dev/sdc1 /mnt/data ext4 defaults,auto,noatime,nodiratime,noexec 0 0' | sudo tee -a /etc/fstab
 
 	echo Mounting the new disk...
-	sudo mount /mnt/data
-	sudo e2label /dev/sdc1 /mnt/data
+	# sudo mount /dev/sdc1 /datadrive
+	sudo mount /dev/sdc1 /mnt/data
+	#sudo e2label /dev/sdc1 /mnt/data
 
 fi
 
@@ -350,10 +351,10 @@ if $isPrimary; then
 	echo Generating replica set security key...
 	openssl rand -base64 753 > $replicaSetKey
 	echo Securely storing replica set key in Azure storage...
-	node updown.js mongodb up $replicaSetKey
+	sudo cp $replicaSetKey /mnt/mountpoint/$replicaSetKey
 else
 	echo Acquiring replica set security key from the cloud...
-	node updown.js mongodb down $replicaSetKey
+	sudo cp /mnt/mountpoint/$replicaSetKey ./$replicaSetKey
 fi
 
 echo Installing replica set key on the machine...
