@@ -314,7 +314,7 @@ fi
 echo Creating MongoDB folders on the disk owned by the mongod user in $mongoDataPath...
 sudo mkdir $mongoDataPath/log
 sudo mkdir $mongoDataPath/db
-sudo chown -R mongod:mongod $mongoDataPath
+#sudo chown -R mongod:mongod $mongoDataPath
 
 # FYI: YAML syntax introduced in MongoDB 2.6
 echo Configuring MongoDB 2.6...
