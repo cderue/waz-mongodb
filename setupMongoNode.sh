@@ -127,8 +127,8 @@ fi
 : ${AZURE_STORAGE_ACCOUNT?"Need to set AZURE_STORAGE_ACCOUNT"}
 : ${AZURE_STORAGE_ACCESS_KEY?"Need to set AZURE_STORAGE_ACCESS_KEY"}
 
- sudo mount -t cifs //$storageAccount.file.core.windows.net/mysharename /mnt/mountpoint -o vers=3.0,username=$storageAccount,password=$storageKey,dir_mode=0777,file_mode=0777
- echo '//$storageAccount.file.core.windows.net/mysharename /mnt/mountpoint -o vers=3.0,username=$storageAccount,password=$storageKey,dir_mode=0777,file_mode=0777' | sudo tee -a /etc/fstab
+ sudo mount -t cifs //$storageAccount.file.core.windows.net/keyfiles /mnt/mountpoint -o vers=3.0,username=$storageAccount,password=$storageKey,dir_mode=0777,file_mode=0777
+ echo '//$storageAccount.file.core.windows.net/keyfiles /mnt/mountpoint -o vers=3.0,username=$storageAccount,password=$storageKey,dir_mode=0777,file_mode=0777' | sudo tee -a /etc/fstab
 
 # Awesome ask function by @davejamesmiller https://gist.github.com/davejamesmiller/1965569
 function ask {
