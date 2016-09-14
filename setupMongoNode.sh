@@ -110,7 +110,7 @@ sudo sed -i -e 's/bindIp: 127.0.0.1/bindIp: 0.0.0.0/g' /etc/mongod.conf
 
 ### AZURE STORAGE CONFIG
 sudo apt-get install cifs-utils
-mkdir /mnt/mountpoint
+sudo mkdir /mnt/mountpoint
 
 if [ -z "$AZURE_STORAGE_ACCOUNT" ]; then
 	read -p "Azure storage account name? " storageAccount
