@@ -364,7 +364,8 @@ echo
 
 echo Starting MongoDB service...
 sudo service mongod start
-sudo chkconfig mongod on
+sudo apt-get install -y sysv-rc-conf
+sudo sysv-rc-conf mongod on
 
 if $isPrimary; then
 
