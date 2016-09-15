@@ -96,7 +96,7 @@ sudo bash -c "sudo echo net.ipv4.tcp_keepalive_time = 120 >> /etc/sysctl.conf"
 sudo apt-get install -y mongodb-org
 
 # Uncomment this to bind to all ip addresses
-sudo sed -i -e 's/bindIp: 127.0.0.1/bindIp: 0.0.0.0/g' /etc/mongod.conf
+#sudo sed -i -e 's/bindIp: 127.0.0.1/bindIp: 0.0.0.0/g' /etc/mongod.conf
 
 
 
@@ -326,6 +326,7 @@ processManagement:
     fork: true
     pidFilePath: "/var/run/mongodb/mongod.pid"
 net:
+    bindIp: 127.0.0.1
     port: $mongodPort
 security:
     keyFile: "/etc/$replicaSetKey"
