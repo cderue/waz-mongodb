@@ -324,16 +324,7 @@ echo About to bring online MongoDB.
 echo This may take a few minutes as the initial journal is preallocated.
 echo
 
-echo Stopping MongoDB service...
-sudo service mongod stop
-echo Starting MongoDB service...
-sudo /usr/bin/mongod --fork --keyFile "/etc/$replicaSetKey" --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db" --replSet "rs0"
-sudo apt-get install -y sysv-rc-conf
-sudo sysv-rc-conf mongod on
-
-if $isPrimary; then
-
-	echo Initializing the replica set...
+echo Initializing the replica set...
 
 	sleep 2
 
@@ -370,22 +361,20 @@ EOF
 	# remove credentials trace
 	rm /tmp/initializeAuthentication.js
 
-	echo
-	echo So you now have a 'clusteradmin' user that can administer the replica set 
-	echo and also add new users to databases. The password was set in this session.
-	echo
-	echo You should probably connect now and create databases, users on any new 
-	echo databases, etc.
-	echo
-	echo Read up on this here:
-	echo http://docs.mongodb.org/manual/tutorial/add-user-to-database/
-	echo 
-	echo To connect to a Mongo instance:
-	echo   mongo MYDB -u Username -p
-	echo
+echo Stopping MongoDB service...
+sudo service mongod stop
+echo Starting MongoDB service...
+sudo /usr/bin/mongod --fork --auth --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db"
+sudo apt-get install -y sysv-rc-conf
+sudo sysv-rc-conf mongod on
+
+if $isPrimary; then
+
+	
+
 
 	if ask "Would you like to connect to MongoDB Shell now ? "; then
-		/usr/bin/mongo #admin -uclusteradmin -p$primaryPasscode
+		/usr/bin/mongo admin -uclusteradmin -p$primaryPasscode
 	fi
 
 else
