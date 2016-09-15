@@ -312,7 +312,7 @@ fi
 echo Creating MongoDB folders on the disk owned by the mongod user in $mongoDataPath...
 sudo mkdir $mongoDataPath/log
 sudo mkdir $mongoDataPath/db
-#sudo chown -R mongod:mongod $mongoDataPath
+sudo chown -R mongodb:mongodb $mongoDataPath
 
 # FYI: YAML syntax introduced in MongoDB 2.6
 echo Configuring MongoDB 2.6...
@@ -350,8 +350,8 @@ fi
 
 echo Installing replica set key on the machine...
 
-#sudo chown mongod:mongod $replicaSetKey
-sudo chmod 400 $replicaSetKey
+sudo chown mongodb:mongodb $replicaSetKey
+sudo chmod 600 $replicaSetKey
 sudo mv $replicaSetKey /etc/$replicaSetKey
 
 echo
