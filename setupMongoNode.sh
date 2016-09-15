@@ -302,7 +302,7 @@ echo Configuring MongoDB...
 echo Installing replica set key on the machine...
 
 sudo apt-get install cifs-utils
-sudo mkdir /mnt/keyfiles
+sudo mkdir /mnt/mountpoint
 sudo mount -t cifs //powerzeevault.file.core.windows.net/keyfiles /mnt/mountpoint -o vers=3.0,username=$storageAccount,password=$storageKey,dir_mode=0777,file_mode=0777
  
 if $isPrimary; then
@@ -365,6 +365,8 @@ echo Stopping MongoDB service...
 sudo service mongod stop
 echo Starting MongoDB service...
 sudo /usr/bin/mongod --fork --auth --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db"
+sudo service mongod stop
+sudo /usr/bin/mongod --fork --keyFile "/etc/$replicaSetKey" --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db"
 sudo apt-get install -y sysv-rc-conf
 sudo sysv-rc-conf mongod on
 
