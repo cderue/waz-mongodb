@@ -387,7 +387,7 @@ EOF
 	fi
 
 	if ask "Would you like to connect to the primary node to look around? "; then
-		/usr/bin/mongo $primaryHostname/admin -uclusteradmin -p$primaryPasscode
+		/usr/bin/mongo $primaryHostname/test
 	fi
 
 fi
