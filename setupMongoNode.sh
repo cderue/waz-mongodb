@@ -101,8 +101,8 @@ sudo apt-get install -y mongodb-org
 
 
 ### AZURE STORAGE CONFIG
-sudo apt-get install cifs-utils
-sudo mkdir /mnt/mountpoint
+#sudo apt-get install cifs-utils
+#sudo mkdir /mnt/mountpoint
 
 if [ -z "$AZURE_STORAGE_ACCOUNT" ]; then
 	read -p "Azure storage account name? " storageAccount
@@ -316,24 +316,24 @@ sudo chown -R mongodb:mongodb $mongoDataPath
 
 # FYI: YAML syntax introduced in MongoDB 2.6
 echo Configuring MongoDB 2.6...
-sudo tee /etc/mongod.conf > /dev/null <<EOF
-systemLog:
-    destination: file
-    path: "/var/log/mongodb/mongod.log"
-    quiet: true
-    logAppend: true
-processManagement:
-    fork: true
-net:
-    port: $mongodPort
-storage:
-    dbPath: "$mongoDataPath/db"
-    directoryPerDB: true
-    journal:
-        enabled: true
-replication:
-    replSetName: "$replicaSetName"
-EOF
+#sudo tee /etc/mongod.conf > /dev/null <<EOF
+#systemLog:
+#    destination: file
+#    path: "/var/log/mongodb/mongod.log"
+#    quiet: true
+#    logAppend: true
+#processManagement:
+#    fork: true
+#net:
+#    port: $mongodPort
+#storage:
+#    dbPath: "$mongoDataPath/db"
+#    directoryPerDB: true
+#    journal:
+#        enabled: true
+#replication:
+#    replSetName: "$replicaSetName"
+#EOF
 
 if $isPrimary; then
 	echo Generating replica set security key...
@@ -342,14 +342,14 @@ if $isPrimary; then
 	sudo cp $replicaSetKey /mnt/mountpoint/$replicaSetKey
 else
 	echo Acquiring replica set security key from the cloud...
-	sudo cp /mnt/mountpoint/$replicaSetKey ./$replicaSetKey
+	#sudo cp /mnt/mountpoint/$replicaSetKey ./$replicaSetKey
 fi
 
 echo Installing replica set key on the machine...
 
-sudo chown mongodb:mongodb $replicaSetKey
-sudo chmod 0600 $replicaSetKey
-sudo mv $replicaSetKey /etc/$replicaSetKey
+#sudo chown mongodb:mongodb $replicaSetKey
+#sudo chmod 0600 $replicaSetKey
+#sudo mv $replicaSetKey /etc/$replicaSetKey
 
 echo
 echo About to bring online MongoDB.
@@ -357,7 +357,8 @@ echo This may take a few minutes as the initial journal is preallocated.
 echo
 
 echo Starting MongoDB service...
-sudo service mongod start
+sudo service mongod stop
+sudo /etc/init.d/mongod --replSet "rs0"
 sudo apt-get install -y sysv-rc-conf
 sudo sysv-rc-conf mongod on
 
