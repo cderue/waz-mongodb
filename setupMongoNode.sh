@@ -117,7 +117,7 @@ isUsingDataDisk=true
 mongoDataPath=/var/lib/mongo
 
 primaryPasscode=
-primaryHostname=$(hostname)
+primaryHostname="$(hostname).westeurope.cloudapp.azure.com"
 
 
 
