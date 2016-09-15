@@ -75,14 +75,6 @@ if [ "$nodeInstalled" != "v0.10.26" ]; then
         exit 1
 fi
 
-echo Installing Azure Node.js module...
-npm install azure@0.8.1  > /tmp/nodeInstall.log 2>&1
-
-echo Installing Azure storage utility...
-wget --no-check-certificate https://raw.github.com/jeffwilcox/waz-updown/master/updown.js > /tmp/updownInstall.log 2>&1
-
-
-
 ### MONGODB
 
 # Configure mongodb.list file with the correct location
