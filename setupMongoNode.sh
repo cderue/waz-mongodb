@@ -48,14 +48,6 @@
 # it helps!
 #
 
-
-
-echo Specialized MongoDB on Microsoft Azure configuration script
-echo by Jeff Wilcox and contributors
-echo
-
-
-
 pushd /tmp > /dev/null
 
 
@@ -105,19 +97,19 @@ sudo apt-get install -y mongodb-org
 #sudo mkdir /mnt/mountpoint
 
 if [ -z "$AZURE_STORAGE_ACCOUNT" ]; then
-	read -p "Azure storage account name? " storageAccount
-	export AZURE_STORAGE_ACCOUNT=$storageAccount
-	echo
+	#read -p "Azure storage account name? " storageAccount
+	#export AZURE_STORAGE_ACCOUNT=$storageAccount
+	#echo
 fi
 
 if [ -z "$AZURE_STORAGE_ACCESS_KEY" ]; then
-	read -p "Account access key? " storageKey
-	export AZURE_STORAGE_ACCESS_KEY=$storageKey
-	echo
+	#read -p "Account access key? " storageKey
+	#export AZURE_STORAGE_ACCESS_KEY=$storageKey
+	#echo
 fi
 
-: ${AZURE_STORAGE_ACCOUNT?"Need to set AZURE_STORAGE_ACCOUNT"}
-: ${AZURE_STORAGE_ACCESS_KEY?"Need to set AZURE_STORAGE_ACCESS_KEY"}
+#: ${AZURE_STORAGE_ACCOUNT?"Need to set AZURE_STORAGE_ACCOUNT"}
+#: ${AZURE_STORAGE_ACCESS_KEY?"Need to set AZURE_STORAGE_ACCESS_KEY"}
 
  #sudo mount -t cifs //$storageAccount.file.core.windows.net/keyfiles /mnt/mountpoint -o vers=3.0,username=$storageAccount,password=$storageKey,dir_mode=0777,file_mode=0777
  #echo '//$storageAccount.file.core.windows.net/keyfiles /mnt/mountpoint -o vers=3.0,username=$storageAccount,password=$storageKey,dir_mode=0777,file_mode=0777' | sudo tee -a /etc/fstab
@@ -228,15 +220,15 @@ if $isPrimary; then
 	node -e "var uuid = require('node-uuid'); console.log(uuid.v4());"
 	echo
 
-	read -s -p "Please enter a new password for the 'clusteradmin' MongoDB user: " primaryPasscode
-	echo
-	read -s -p "Please confirm that awesome new password: " primaryPasscodeConfirmation
-	echo
+	#read -s -p "Please enter a new password for the 'clusteradmin' MongoDB user: " primaryPasscode
+	#echo
+	#read -s -p "Please confirm that awesome new password: " primaryPasscodeConfirmation
+	#echo
 
-	if [ "$primaryPasscode" != "$primaryPasscodeConfirmation" ]; then
-		echo The passwords did not match. Sorry. Goodbye.
-		exit 1
-	fi
+	#if [ "$primaryPasscode" != "$primaryPasscodeConfirmation" ]; then
+	#	echo The passwords did not match. Sorry. Goodbye.
+	#	exit 1
+	#fi
 
 fi
 
@@ -356,9 +348,10 @@ echo About to bring online MongoDB.
 echo This may take a few minutes as the initial journal is preallocated.
 echo
 
-echo Starting MongoDB service...
+echo Stopping MongoDB service...
 sudo service mongod stop
-sudo /etc/init.d/mongod --replSet "rs0"
+echo Starting MongoDB service...
+sudo /usr/bin/mongod --replSet "rs0"
 sudo apt-get install -y sysv-rc-conf
 sudo sysv-rc-conf mongod on
 
@@ -395,8 +388,8 @@ EOF
 
 	#/usr/bin/mongo /tmp/initializeAuthentication.js --verbose > /tmp/creatingMongoClusterAdmin.log 2>&1	
 
-	echo Authentication ready. Restarting MongoDB...
-	sudo service mongod restart
+	#echo Authentication ready. Restarting MongoDB...
+	#sudo service mongod restart
 
 	# remove credentials trace
 	rm /tmp/initializeAuthentication.js
@@ -415,7 +408,7 @@ EOF
 	echo   mongo MYDB -u Username -p
 	echo
 
-	if ask "Would you like to connect to MongoDB Shell now as 'clusteradmin' to do this? "; then
+	if ask "Would you like to connect to MongoDB Shell now ? "; then
 		/usr/bin/mongo #admin -uclusteradmin -p$primaryPasscode
 	fi
 
