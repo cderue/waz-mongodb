@@ -119,7 +119,7 @@ fi
 : ${AZURE_STORAGE_ACCOUNT?"Need to set AZURE_STORAGE_ACCOUNT"}
 : ${AZURE_STORAGE_ACCESS_KEY?"Need to set AZURE_STORAGE_ACCESS_KEY"}
 
- sudo mount -t cifs //$storageAccount.file.core.windows.net/keyfiles /mnt/mountpoint -o vers=3.0,username=$storageAccount,password=$storageKey,dir_mode=0777,file_mode=0777
+ #sudo mount -t cifs //$storageAccount.file.core.windows.net/keyfiles /mnt/mountpoint -o vers=3.0,username=$storageAccount,password=$storageKey,dir_mode=0777,file_mode=0777
  #echo '//$storageAccount.file.core.windows.net/keyfiles /mnt/mountpoint -o vers=3.0,username=$storageAccount,password=$storageKey,dir_mode=0777,file_mode=0777' | sudo tee -a /etc/fstab
 
 # Awesome ask function by @davejamesmiller https://gist.github.com/davejamesmiller/1965569
@@ -326,9 +326,6 @@ processManagement:
     fork: true
 net:
     port: $mongodPort
-security:
-    keyFile: "/etc/$replicaSetKey"
-    authorization: "enabled"
 storage:
     dbPath: "$mongoDataPath/db"
     directoryPerDB: true
@@ -395,7 +392,7 @@ db.createUser({
 });
 EOF
 
-	/usr/bin/mongo /tmp/initializeAuthentication.js --verbose > /tmp/creatingMongoClusterAdmin.log 2>&1	
+	#/usr/bin/mongo /tmp/initializeAuthentication.js --verbose > /tmp/creatingMongoClusterAdmin.log 2>&1	
 
 	echo Authentication ready. Restarting MongoDB...
 	sudo service mongod restart
@@ -418,7 +415,7 @@ EOF
 	echo
 
 	if ask "Would you like to connect to MongoDB Shell now as 'clusteradmin' to do this? "; then
-		/usr/bin/mongo admin -uclusteradmin -p$primaryPasscode
+		/usr/bin/mongo #admin -uclusteradmin -p$primaryPasscode
 	fi
 
 else
