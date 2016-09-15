@@ -352,7 +352,7 @@ db.createUser({
   ]
 });
 EOF
-
+	sudo /usr/bin/mongod --fork --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db"
 	/usr/bin/mongo /tmp/initializeAuthentication.js --verbose > /tmp/creatingMongoClusterAdmin.log 2>&1	
 
 	echo Authentication ready. Restarting MongoDB...
