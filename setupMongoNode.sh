@@ -378,10 +378,10 @@ EOF
 	fi
 
 	echo Joining the MongoDB cluster...
-	/usr/bin/mongo $primaryHostname/admin -uclusteradmin -p$primaryPasscode /tmp/joinCluster.js --verbose > /tmp/joinCluster.log 2>&1
+	/usr/bin/mongo $primaryHostname/test  /tmp/joinCluster.js --verbose > /tmp/joinCluster.log 2>&1
 
 	if ask "Would you like to view the replica set status? "; then
-		/usr/bin/mongo $primaryHostname/admin -uclusteradmin -p$primaryPasscode << EOF
+		/usr/bin/mongo $primaryHostname/test << EOF
 rs.status();
 EOF
 	fi
