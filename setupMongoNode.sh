@@ -147,7 +147,6 @@ if ! ask "Is this the first node in the replica set? "; then
 
 	echo
 	read -p "Primary node hostname? " primaryHostname
-	read -p "Primary node cluster administrator password? " -s primaryPasscode
 	echo
 	echo
 fi
@@ -281,16 +280,6 @@ echo Configuring MongoDB...
 #replication:
 #    replSetName: "$replicaSetName"
 #EOF
-
-if $isPrimary; then
-	#echo Generating replica set security key...
-	#openssl rand -base64 753 > $replicaSetKey
-	#echo Securely storing replica set key in Azure storage...
-	#sudo cp $replicaSetKey /mnt/mountpoint/$replicaSetKey
-else
-	#echo Acquiring replica set security key from the cloud...
-	#sudo cp /mnt/mountpoint/$replicaSetKey ./$replicaSetKey
-fi
 
 #echo Installing replica set key on the machine...
 
