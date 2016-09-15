@@ -232,7 +232,7 @@ if $isUsingDataDisk; then
 n
 p
 1
-1
+
 
 w
 ENDPARTITION
@@ -282,11 +282,21 @@ echo Configuring MongoDB...
 #    replSetName: "$replicaSetName"
 #EOF
 
-#echo Installing replica set key on the machine...
+echo Installing replica set key on the machine...
 
-#sudo chown mongodb:mongodb $replicaSetKey
-#sudo chmod 0600 $replicaSetKey
-#sudo mv $replicaSetKey /etc/$replicaSetKey
+if $isPrimary; then
+	echo Generating replica set security key...
+	openssl rand -base64 753 > $replicaSetKey
+	echo Securely storing replica set key in Azure storage...
+	node updown.js mongodb up $replicaSetKey
+else
+	echo Acquiring replica set security key from the cloud...
+	node updown.js mongodb down $replicaSetKey
+fi
+
+sudo chown mongodb:mongodb $replicaSetKey
+sudo chmod 0600 $replicaSetKey
+sudo mv $replicaSetKey /etc/$replicaSetKey
 
 echo
 echo About to bring online MongoDB.
