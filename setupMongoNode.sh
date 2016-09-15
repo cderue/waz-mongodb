@@ -74,6 +74,23 @@ sudo bash -c "sudo echo net.ipv4.tcp_keepalive_time = 120 >> /etc/sysctl.conf"
 #Install Mongo DB
 sudo apt-get install -y mongodb-org
 
+### AZURE STORAGE CONFIG
+
+if [ -z "$AZURE_STORAGE_ACCOUNT" ]; then
+	read -p "Azure storage account name? " storageAccount
+	export AZURE_STORAGE_ACCOUNT=$storageAccount
+	echo
+fi
+
+if [ -z "$AZURE_STORAGE_ACCESS_KEY" ]; then
+	read -p "Account access key? " storageKey
+	export AZURE_STORAGE_ACCESS_KEY=$storageKey
+	echo
+fi
+
+: ${AZURE_STORAGE_ACCOUNT?"Need to set AZURE_STORAGE_ACCOUNT"}
+: ${AZURE_STORAGE_ACCESS_KEY?"Need to set AZURE_STORAGE_ACCESS_KEY"}
+
 # Awesome ask function by @davejamesmiller https://gist.github.com/davejamesmiller/1965569
 function ask {
     while true; do
