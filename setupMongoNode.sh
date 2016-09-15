@@ -87,33 +87,6 @@ sudo bash -c "sudo echo net.ipv4.tcp_keepalive_time = 120 >> /etc/sysctl.conf"
 #Install Mongo DB
 sudo apt-get install -y mongodb-org
 
-# Uncomment this to bind to all ip addresses
-#sudo sed -i -e 's/bindIp: 127.0.0.1/bindIp: 0.0.0.0/g' /etc/mongod.conf
-
-
-
-### AZURE STORAGE CONFIG
-#sudo apt-get install cifs-utils
-#sudo mkdir /mnt/mountpoint
-
-if [ -z "$AZURE_STORAGE_ACCOUNT" ]; then
-	#read -p "Azure storage account name? " storageAccount
-	#export AZURE_STORAGE_ACCOUNT=$storageAccount
-	#echo
-fi
-
-if [ -z "$AZURE_STORAGE_ACCESS_KEY" ]; then
-	#read -p "Account access key? " storageKey
-	#export AZURE_STORAGE_ACCESS_KEY=$storageKey
-	#echo
-fi
-
-#: ${AZURE_STORAGE_ACCOUNT?"Need to set AZURE_STORAGE_ACCOUNT"}
-#: ${AZURE_STORAGE_ACCESS_KEY?"Need to set AZURE_STORAGE_ACCESS_KEY"}
-
- #sudo mount -t cifs //$storageAccount.file.core.windows.net/keyfiles /mnt/mountpoint -o vers=3.0,username=$storageAccount,password=$storageKey,dir_mode=0777,file_mode=0777
- #echo '//$storageAccount.file.core.windows.net/keyfiles /mnt/mountpoint -o vers=3.0,username=$storageAccount,password=$storageKey,dir_mode=0777,file_mode=0777' | sudo tee -a /etc/fstab
-
 # Awesome ask function by @davejamesmiller https://gist.github.com/davejamesmiller/1965569
 function ask {
     while true; do
