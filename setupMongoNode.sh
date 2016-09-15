@@ -292,8 +292,8 @@ echo About to bring online MongoDB.
 echo This may take a few minutes as the initial journal is preallocated.
 echo
 
-#echo Stopping MongoDB service...
-#sudo service mongod stop
+echo Stopping MongoDB service...
+sudo service mongod stop
 echo Starting MongoDB service...
 sudo /usr/bin/mongod --fork --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db" --replSet "rs0"
 sudo apt-get install -y sysv-rc-conf
@@ -358,7 +358,7 @@ EOF
 
 else
 
-	ourHostname=$(hostname)
+	ourHostname="$(hostname).westeurope.cloudapp.azure.com"
 
 	if $isArbiter; then
 		cat <<EOF > /tmp/joinCluster.js
