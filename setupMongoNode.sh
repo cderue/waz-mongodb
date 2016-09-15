@@ -351,7 +351,7 @@ fi
 echo Installing replica set key on the machine...
 
 sudo chown mongodb:mongodb $replicaSetKey
-sudo chmod 600 $replicaSetKey
+sudo chmod 0600 $replicaSetKey
 sudo mv $replicaSetKey /etc/$replicaSetKey
 
 echo
