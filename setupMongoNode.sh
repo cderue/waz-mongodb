@@ -301,14 +301,18 @@ echo Configuring MongoDB...
 
 echo Installing replica set key on the machine...
 
+sudo apt-get install cifs-utils
+sudo mkdir /mnt/keyfiles
+sudo mount -t cifs //powerzeevault.file.core.windows.net/keyfiles ./mymountpoint -o vers=3.0,username=$storageAccount,password=$storageKey,dir_mode=0777,file_mode=0777
+ 
 if $isPrimary; then
 	echo Generating replica set security key...
 	openssl rand -base64 753 > $replicaSetKey
 	echo Securely storing replica set key in Azure storage...
-	node updown.js mongodb up $replicaSetKey
+	cp $replicaSetKey /mnt/mountpoint/$replicaSetKey
 else
 	echo Acquiring replica set security key from the cloud...
-	node updown.js mongodb down $replicaSetKey
+	cp /mnt/mountpoint/$replicaSetKey ./$replicaSetKey
 fi
 
 sudo chown mongodb:mongodb $replicaSetKey
