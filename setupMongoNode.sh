@@ -324,9 +324,7 @@ systemLog:
     logAppend: true
 processManagement:
     fork: true
-    pidFilePath: "/var/run/mongodb/mongod.pid"
 net:
-    bindIp: 127.0.0.1
     port: $mongodPort
 security:
     keyFile: "/etc/$replicaSetKey"
