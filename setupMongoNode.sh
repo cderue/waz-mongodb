@@ -54,19 +54,6 @@ pushd /tmp > /dev/null
 
 ### PREREQ SOFTWARE
 
-echo Installing Node.js...
-wget --no-check-certificate https://raw.github.com/isaacs/nave/master/nave.sh > /tmp/naveNode.log 2>&1
-chmod +x nave.sh
-sudo ./nave.sh usemain 0.10.26  > /tmp/naveNodeUseMain.log 2>&1
-# ./nave.sh install 0.10.26
-# ./nave.sh use 0.10.26
-
-nodeInstalled=$(node -v)
-if [ "$nodeInstalled" != "v0.10.26" ]; then
-        echo Node.js could not be installed.
-        exit 1
-fi
-
 ### MONGODB
 
 # Configure mongodb.list file with the correct location
@@ -182,16 +169,11 @@ if $isPrimary; then
 	echo be needed to bring online new nodes in the cluster.
 	echo
 
-	npm install node-uuid > /tmp/npm-temp.log 2>&1
-
 	echo Time to set a password for the 'clusteradmin' user. This user will not 
 	echo directly have access to data stored in the cluster, but it will be able
 	echo to create and modify such credentials.
 	echo
-	echo Here is a suggested password that is a random UUID, in case you like 
-	echo what you see:
-	node -e "var uuid = require('node-uuid'); console.log(uuid.v4());"
-	echo
+	
 
 	#read -s -p "Please enter a new password for the 'clusteradmin' MongoDB user: " primaryPasscode
 	#echo
@@ -280,7 +262,7 @@ sudo mkdir $mongoDataPath/db
 sudo chown -R mongodb:mongodb $mongoDataPath
 
 # FYI: YAML syntax introduced in MongoDB 2.6
-echo Configuring MongoDB 2.6...
+echo Configuring MongoDB...
 #sudo tee /etc/mongod.conf > /dev/null <<EOF
 #systemLog:
 #    destination: file
@@ -301,16 +283,16 @@ echo Configuring MongoDB 2.6...
 #EOF
 
 if $isPrimary; then
-	echo Generating replica set security key...
-	openssl rand -base64 753 > $replicaSetKey
-	echo Securely storing replica set key in Azure storage...
-	sudo cp $replicaSetKey /mnt/mountpoint/$replicaSetKey
+	#echo Generating replica set security key...
+	#openssl rand -base64 753 > $replicaSetKey
+	#echo Securely storing replica set key in Azure storage...
+	#sudo cp $replicaSetKey /mnt/mountpoint/$replicaSetKey
 else
-	echo Acquiring replica set security key from the cloud...
+	#echo Acquiring replica set security key from the cloud...
 	#sudo cp /mnt/mountpoint/$replicaSetKey ./$replicaSetKey
 fi
 
-echo Installing replica set key on the machine...
+#echo Installing replica set key on the machine...
 
 #sudo chown mongodb:mongodb $replicaSetKey
 #sudo chmod 0600 $replicaSetKey
@@ -321,10 +303,10 @@ echo About to bring online MongoDB.
 echo This may take a few minutes as the initial journal is preallocated.
 echo
 
-echo Stopping MongoDB service...
-sudo service mongod stop
+#echo Stopping MongoDB service...
+#sudo service mongod stop
 echo Starting MongoDB service...
-sudo /usr/bin/mongod --replSet "rs0"
+sudo /usr/bin/mongod --fork --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db" --replSet "rs0"
 sudo apt-get install -y sysv-rc-conf
 sudo sysv-rc-conf mongod on
 
