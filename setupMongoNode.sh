@@ -191,15 +191,15 @@ if $isPrimary; then
 	echo
 	
 
-	#read -s -p "Please enter a new password for the 'clusteradmin' MongoDB user: " primaryPasscode
-	#echo
-	#read -s -p "Please confirm that awesome new password: " primaryPasscodeConfirmation
-	#echo
+	read -s -p "Please enter a new password for the 'clusteradmin' MongoDB user: " primaryPasscode
+	echo
+	read -s -p "Please confirm that awesome new password: " primaryPasscodeConfirmation
+	echo
 
-	#if [ "$primaryPasscode" != "$primaryPasscodeConfirmation" ]; then
-	#	echo The passwords did not match. Sorry. Goodbye.
-	#	exit 1
-	#fi
+	if [ "$primaryPasscode" != "$primaryPasscodeConfirmation" ]; then
+		echo The passwords did not match. Sorry. Goodbye.
+		exit 1
+	fi
 
 fi
 
@@ -303,7 +303,7 @@ echo Installing replica set key on the machine...
 
 sudo apt-get install cifs-utils
 sudo mkdir /mnt/keyfiles
-sudo mount -t cifs //powerzeevault.file.core.windows.net/keyfiles ./mymountpoint -o vers=3.0,username=$storageAccount,password=$storageKey,dir_mode=0777,file_mode=0777
+sudo mount -t cifs //powerzeevault.file.core.windows.net/keyfiles /mnt/mountpoint -o vers=3.0,username=$storageAccount,password=$storageKey,dir_mode=0777,file_mode=0777
  
 if $isPrimary; then
 	echo Generating replica set security key...
@@ -327,7 +327,7 @@ echo
 echo Stopping MongoDB service...
 sudo service mongod stop
 echo Starting MongoDB service...
-sudo /usr/bin/mongod --fork --keyFile "etc/$replicaSetKey" --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db" --replSet "rs0"
+sudo /usr/bin/mongod --fork --keyFile "/etc/$replicaSetKey" --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db" --replSet "rs0"
 sudo apt-get install -y sysv-rc-conf
 sudo sysv-rc-conf mongod on
 
@@ -362,9 +362,9 @@ db.createUser({
 });
 EOF
 
-	#/usr/bin/mongo /tmp/initializeAuthentication.js --verbose > /tmp/creatingMongoClusterAdmin.log 2>&1	
+	/usr/bin/mongo /tmp/initializeAuthentication.js --verbose > /tmp/creatingMongoClusterAdmin.log 2>&1	
 
-	#echo Authentication ready. Restarting MongoDB...
+	echo Authentication ready. Restarting MongoDB...
 	#sudo service mongod restart
 
 	# remove credentials trace
