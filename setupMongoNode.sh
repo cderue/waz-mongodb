@@ -242,13 +242,14 @@ ENDPARTITION
 
 	echo Preparing permanent data disk mount point at /mnt/data...
 	sudo mkdir /mnt/data
-	echo '/dev/sdc1 /mnt/data ext4 defaults,auto,noatime,nodiratime,noexec 0 0' | sudo tee -a /etc/fstab
+	
 
 	echo Mounting the new disk...
 	# sudo mount /dev/sdc1 /datadrive
 	sudo mount /dev/sdc1 /mnt/data
 	#sudo e2label /dev/sdc1 /mnt/data
-
+	echo Add a new entry to fstab
+        echo '/dev/sdc1 /mnt/data ext4 defaults,auto,noatime,nodiratime,noexec 0 0' | sudo tee -a /etc/fstab
 fi
 
 
