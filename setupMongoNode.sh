@@ -353,8 +353,10 @@ db.createUser({
 });
 EOF
 	sudo /usr/bin/mongod --fork --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db"
-	/usr/bin/mongo /tmp/initializeAuthentication.js --verbose > /tmp/creatingMongoClusterAdmin.log 2>&1	
-
+	/usr/bin/mongo /tmp/initializeAuthentication.js --verbose > /tmp/creatingMongoClusterAdmin.log 2>&1
+	sudo /usr/bin/mongod --dbpath "$mongoDataPath/db" --shutdown
+	sudo /usr/bin/mongod --fork --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db" --replSet "$replicaSetName"
+        /usr/bin/mongo /tmp/initializeReplicaSetPrimary.js > /tmp/creatingMongoCluster.log 2>&1
 	echo Authentication ready. Restarting MongoDB...
 	#sudo service mongod restart
 
@@ -374,7 +376,7 @@ sudo sysv-rc-conf mongod on
 if $isPrimary; then
 
 	
-	/usr/bin/mongo /tmp/initializeReplicaSetPrimary.js > /tmp/creatingMongoCluster.log 2>&1
+
 
 	if ask "Would you like to connect to MongoDB Shell now ? "; then
 		/usr/bin/mongo admin -uclusteradmin -p$primaryPasscode
