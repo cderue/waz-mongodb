@@ -362,11 +362,14 @@ EOF
 
 if $isPrimary; then
        sudo /usr/bin/mongod --fork --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db" --replSet "$replicaSetName"
+       sleep 10
         /usr/bin/mongo /tmp/initializeReplicaSetPrimary.js --verbose > /tmp/creatingMongoCluster.log 2>&1
+        sleep 10
         sudo /usr/bin/mongod --dbpath "$mongoDataPath/db" --shutdown
         sudo /usr/bin/mongod --fork --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db"
+        sleep 10
         /usr/bin/mongo /tmp/initializeAuthentication.js --verbose > /tmp/creatingMongoClusterAdmin.log 2>&1
-
+sleep 10
 
         echo Authentication ready. Restarting MongoDB...
         #sudo service mongod restart
@@ -378,9 +381,10 @@ echo Stopping MongoDB service...
 sudo /usr/bin/mongod --dbpath "$mongoDataPath/db" --shutdown
 echo Starting MongoDB service...
 sudo /usr/bin/mongod --fork --auth --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db"
+sleep 10
 sudo /usr/bin/mongod --dbpath "$mongoDataPath/db" --shutdown
 sudo /usr/bin/mongod --fork --keyFile "/etc/$replicaSetKey" --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db" --replSet "$replicaSetName"
-	
+sleep 10	
 
 
 	if ask "Would you like to connect to MongoDB Shell now ? "; then
