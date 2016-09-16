@@ -366,14 +366,14 @@ EOF
 	rm /tmp/initializeAuthentication.js
 
 echo Stopping MongoDB service...
-sudo /usr/bin/mongod --dbpath "$mongoDataPath/db" --shutdown 
+sudo /usr/bin/mongod --dbpath "$mongoDataPath/db" --shutdown
 echo Starting MongoDB service...
 sudo /usr/bin/mongod --fork --auth --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db"
 sudo /usr/bin/mongod --dbpath "$mongoDataPath/db" --shutdown
 sudo /usr/bin/mongod --fork --keyFile "/etc/$replicaSetKey" --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db" --replSet "$replicaSetName"
-
 sudo apt-get install -y sysv-rc-conf
 sudo sysv-rc-conf mongod on
+
 
 if $isPrimary; then
 
