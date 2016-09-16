@@ -393,6 +393,7 @@ sleep 10
 
 else
 	sudo /usr/bin/mongod --fork --keyFile "/etc/$replicaSetKey" --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db" --replSet "$replicaSetName"
+	sleep 10
 	ourHostname="$(hostname).westeurope.cloudapp.azure.com"
 
 	if $isArbiter; then
@@ -414,7 +415,7 @@ EOF
 
 	echo Joining the MongoDB cluster...
 	/usr/bin/mongo $primaryHostname/admin -uclusteradmin -p$primaryPasscode /tmp/joinCluster.js --verbose > /tmp/joinCluster.log 2>&1
-
+        sleep 10
 	if ask "Would you like to view the replica set status? "; then
 		/usr/bin/mongo $primaryHostname/admin -uclusteradmin -p$primaryPasscode << EOF
 rs.status();
