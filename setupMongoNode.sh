@@ -352,18 +352,19 @@ db.createUser({
   ]
 });
 EOF
-	sudo /usr/bin/mongod --fork --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db" --replSet "$replicaSetName"
-        /usr/bin/mongo /tmp/initializeReplicaSetPrimary.js > /tmp/creatingMongoCluster.log 2>&1
+ sudo /usr/bin/mongod --dbpath "$mongoDataPath/db" --shutdown
+        sudo /usr/bin/mongod --fork --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db" --replSet "$replicaSetName"
+        /usr/bin/mongo /tmp/initializeReplicaSetPrimary.js --verbose > /tmp/creatingMongoCluster.log 2>&1
         sudo /usr/bin/mongod --dbpath "$mongoDataPath/db" --shutdown
-	sudo /usr/bin/mongod --fork --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db"
-	/usr/bin/mongo /tmp/initializeAuthentication.js --verbose > /tmp/creatingMongoClusterAdmin.log 2>&1
-	
-	
-	echo Authentication ready. Restarting MongoDB...
-	#sudo service mongod restart
+        sudo /usr/bin/mongod --fork --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db"
+        /usr/bin/mongo /tmp/initializeAuthentication.js --verbose > /tmp/creatingMongoClusterAdmin.log 2>&1
 
-	# remove credentials trace
-	rm /tmp/initializeAuthentication.js
+
+        echo Authentication ready. Restarting MongoDB...
+        #sudo service mongod restart
+
+        # remove credentials trace
+        rm /tmp/initializeAuthentication.js
 
 echo Stopping MongoDB service...
 sudo /usr/bin/mongod --dbpath "$mongoDataPath/db" --shutdown
