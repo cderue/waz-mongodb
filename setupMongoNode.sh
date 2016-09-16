@@ -167,6 +167,7 @@ if ! ask "Is this the first node in the replica set? "; then
 
 	echo
 	read -p "Primary node hostname? " primaryHostname
+	read -p "Primary node cluster administrator password? " -s primaryPasscode
 	echo
 	echo
 fi
