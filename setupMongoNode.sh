@@ -74,6 +74,9 @@ sudo bash -c "sudo echo net.ipv4.tcp_keepalive_time = 120 >> /etc/sysctl.conf"
 #Install Mongo DB
 sudo apt-get install -y mongodb-org
 
+sudo apt-get install -y sysv-rc-conf
+sudo sysv-rc-conf mongod on
+
 ### AZURE STORAGE CONFIG
 
 if [ -z "$AZURE_STORAGE_ACCOUNT" ]; then
@@ -353,7 +356,12 @@ db.createUser({
 });
 EOF
  sudo /usr/bin/mongod --dbpath "$mongoDataPath/db" --shutdown
-        sudo /usr/bin/mongod --fork --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db" --replSet "$replicaSetName"
+        
+
+
+
+if $isPrimary; then
+       sudo /usr/bin/mongod --fork --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db" --replSet "$replicaSetName"
         /usr/bin/mongo /tmp/initializeReplicaSetPrimary.js --verbose > /tmp/creatingMongoCluster.log 2>&1
         sudo /usr/bin/mongod --dbpath "$mongoDataPath/db" --shutdown
         sudo /usr/bin/mongod --fork --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db"
@@ -372,12 +380,6 @@ echo Starting MongoDB service...
 sudo /usr/bin/mongod --fork --auth --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db"
 sudo /usr/bin/mongod --dbpath "$mongoDataPath/db" --shutdown
 sudo /usr/bin/mongod --fork --keyFile "/etc/$replicaSetKey" --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db" --replSet "$replicaSetName"
-sudo apt-get install -y sysv-rc-conf
-sudo sysv-rc-conf mongod on
-
-
-if $isPrimary; then
-
 	
 
 
@@ -386,7 +388,7 @@ if $isPrimary; then
 	fi
 
 else
-
+	sudo /usr/bin/mongod --fork --keyFile "/etc/$replicaSetKey" --logpath "/var/log/mongodb/mongodb.log" --dbpath "$mongoDataPath/db" --replSet "$replicaSetName"
 	ourHostname="$(hostname).westeurope.cloudapp.azure.com"
 
 	if $isArbiter; then
