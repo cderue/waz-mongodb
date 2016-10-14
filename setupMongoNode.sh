@@ -307,7 +307,7 @@ echo Installing replica set key on the machine...
 
 sudo apt-get install cifs-utils
 sudo mkdir /mnt/mountpoint
-sudo mount -t cifs //powerzeevault.file.core.windows.net/keyfiles /mnt/mountpoint -o vers=3.0,username=$storageAccount,password=$storageKey,dir_mode=0777,file_mode=0777
+sudo mount -t cifs //powerzeeintevault.file.core.windows.net/keyfiles /mnt/mountpoint -o vers=3.0,username=$storageAccount,password=$storageKey,dir_mode=0777,file_mode=0777
  
 if $isPrimary; then
 	echo Generating replica set security key...
